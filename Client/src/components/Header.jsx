@@ -1,10 +1,13 @@
-import logo from "../assets/logo.svg";
+import logo from "../assets/Logo.jpg";
 
 export default function Header() {
   return (
     <div className="header">
-      <img src={logo} alt="Study Planner" className="logo" />
-      <h1 id="title">Study Planner</h1>
+      <div className="logo">
+        <img src={logo} alt="Smart Tasks Planner" />
+      </div>
+
+      <h1 id="title">Smart Tasks Planner</h1>
     </div>
   );
 }

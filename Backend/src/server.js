@@ -1,10 +1,22 @@
 import e from "express";
 import axios from "axios";
+import CORS from "cors";
+import taskRouter from "./routes/Tasks.js";
 
 const app = e();
 
+app.use(CORS());
 app.use(e.json());
 app.use(e.urlencoded({ extended: true }));
+
+app.use((req, res, next) => {
+  const method = req.method;
+  const path = req.path;
+  console.log(method, path);
+  next();
+});
+
+app.use("/api/", taskRouter);
 
 app.get("/api/ollama", (req, res) => {
   res.send(`<form method="POST" action="/api/ollama" >
@@ -53,6 +65,7 @@ app.post("/api/ollama", async (req, res) => {
     res.status(500).json({ error: "Failed to get response from Ollama" });
   }
 });
+
 app.listen(3000, () => {
   console.log("Server is running in http://localhost:3000");
 });

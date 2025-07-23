@@ -10,7 +10,6 @@
   height: 5rem;
   border-radius: 10%;
   overflow: hidden;
-  margin: 1rem;
   background-color: white;
   will-change: filter;
   transition: filter 300ms;

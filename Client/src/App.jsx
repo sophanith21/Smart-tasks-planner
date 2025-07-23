@@ -1,13 +1,14 @@
-import "./App.css";
-import Header from "./components/Header";
-import Body from "./components/Body";
-import Footer from "./components/Footer";
+import Tasks from "./pages/Tasks";
+import WeeklySchedule from "./pages/WeeklySchedule";
+import { Routes, Route } from "react-router-dom";
+
 function App() {
   return (
     <>
-      <Header />
-      <Body />
-      <Footer />
+      <Routes>
+        <Route path="/tasks" element={<Tasks />} />
+        <Route path="/weekly-schedule" element={<WeeklySchedule />} />
+      </Routes>
     </>
   );
 }

@@ -2,6 +2,8 @@ import e from "express";
 import axios from "axios";
 import CORS from "cors";
 import taskRouter from "./routes/Tasks.js";
+import weeklyScheduleRouter from "./routes/WeeklySchedule.js";
+import authMiddleware from "./midldewares/authMiddleware.js";
 
 const app = e();
 
@@ -16,7 +18,10 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(authMiddleware);
+
 app.use("/api/", taskRouter);
+app.use("/api/", weeklyScheduleRouter);
 
 app.get("/api/ollama", (req, res) => {
   res.send(`<form method="POST" action="/api/ollama" >
@@ -66,6 +71,6 @@ app.post("/api/ollama", async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
+app.listen(3000, "0.0.0.0", () => {
   console.log("Server is running in http://localhost:3000");
 });

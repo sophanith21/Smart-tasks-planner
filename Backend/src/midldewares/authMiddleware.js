@@ -4,4 +4,9 @@ export default function authMiddleware(req, res, next) {
 
   try {
   } catch {}
+  let user = {};
+  user.id = 1;
+  req.user = user;
+  console.log(req.user);
+  next();
 }

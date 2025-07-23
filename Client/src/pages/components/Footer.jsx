@@ -1,8 +1,8 @@
-import GitHub from "../assets/github-mark-c791e9551fe4/github-mark/github-mark-white.svg";
+import GitHub from "../../assets/github-mark-c791e9551fe4/github-mark/github-mark-white.svg";
 import "./footer.css";
 export default function Footer() {
   return (
-    <div className="container">
+    <footer className="container">
       <div className="upper">
         <div className="left">
           <h3>Contact</h3>
@@ -34,6 +34,6 @@ export default function Footer() {
           &copy; {new Date(Date.now()).getFullYear()} Interactive Study Planner
         </h3>
       </div>
-    </div>
+    </footer>
   );
 }

@@ -7,7 +7,7 @@ export default function Header() {
         <div className="logo">
           <img src={logo} alt="Smart Tasks Planner" />
         </div>
-        <h1 id="title">Smart Tasks Planner</h1>
+        <h1 className="text-2xl">Smart Tasks Planner</h1>
       </div>
       <div className="flex items-center gap-5">
         <h1 className="text-2xl">My Name</h1>

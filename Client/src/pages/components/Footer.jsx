@@ -13,6 +13,13 @@ export default function Footer() {
           >
             <p>sophanithmeas91@gmail.com</p>
           </a>
+          <a
+            href="mailto:pichsokreaksa505@gmail.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <p>pichsokreaksa505@gmail.com</p>
+          </a>
         </div>
         <div className="mid">
           <h3>Privacy Policy</h3>
@@ -30,9 +37,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="lower">
-        <h3>
-          &copy; {new Date(Date.now()).getFullYear()} Interactive Study Planner
-        </h3>
+        <h3>&copy; {new Date(Date.now()).getFullYear()} Smart Tasks Planner</h3>
       </div>
     </footer>
   );

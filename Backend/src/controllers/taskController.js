@@ -12,11 +12,14 @@ export async function getAllTasks(req, res) {
 }
 
 export async function updateTask(req, res) {
+  const user = req.user;
   const { updateField } = req.body;
   const id = req.params.id;
   console.log(updateField);
   try {
-    const result = await db.Tasks.update(updateField, { where: { id: id } });
+    const result = await db.Tasks.update(updateField, {
+      where: { id: id, UserId: user.id },
+    });
     console.log(result);
     res.json(result);
   } catch (err) {
@@ -26,9 +29,12 @@ export async function updateTask(req, res) {
 }
 
 export async function deleteTask(req, res) {
+  const user = req.user;
   const id = req.params.id;
   try {
-    const result = await db.Tasks.destroy({ where: { id: id } });
+    const result = await db.Tasks.destroy({
+      where: { id: id, UserId: user.id },
+    });
     res.json(result);
   } catch (err) {
     console.error(err);

@@ -23,6 +23,7 @@ a:hover {
   background-color: black;
   display: flex;
   flex-direction: column;
+  min-width: 100vw;
 }
 .upper {
   display: flex;

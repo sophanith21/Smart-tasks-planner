@@ -8,10 +8,14 @@ import Signup from "./pages/components/Signup.jsx";
 import Task from "./pages/Task.jsx";
 import Nav from "./pages/Nav.jsx";
 import ProtectedRoute from "./pages/components/ProtectedRoute.jsx";
+import Landing from "./pages/Landing.jsx";
 
 function AppRoutes() {
   return (
     <Routes>
+      <Route path='*' element={<Navigate to='/' replace />} />
+      <Route path='/' element={<Landing />} />
+      <Route path='/home' element={<Navigate to='/' replace />} />
       <Route path='/login' element={<Login />} />
       <Route path='/signup' element={<Signup />} />
       <Route

@@ -1,14 +1,14 @@
-import circle from "../assets/circle.svg";
-import circle_click from "../assets/circle-click.svg";
-import task from "../assets/Add_task.svg";
-import chevronDown from "../assets/Chevron down.svg";
-import chevronDown_Dark from "../assets/Chevron down_black.svg";
+import circle from "../../assets/circle.svg";
+import circle_click from "../../assets/circle-click.svg";
+import task from "../../assets/Add_task.svg";
+import chevronDown from "../../assets/Chevron down.svg";
+import chevronDown_Dark from "../../assets/Chevron down_black.svg";
 import { formatDistanceToNow } from "date-fns";
 import DatePicker from "react-datepicker";
 import { useEffect, useState } from "react";
 import * as ContextMenu from "@radix-ui/react-context-menu";
 import "react-datepicker/dist/react-datepicker.css";
-import api from "../api/api";
+import api from "../../api/api";
 
 export default function Body() {
   //================================== Body's States & Variables ==================================
@@ -161,9 +161,9 @@ export default function Body() {
 
   return (
     <>
-      <div className="list-container">
+      <div className='list-container'>
         <div
-          className="all-tasks"
+          className='all-tasks'
           onClick={() => setAllTaskClick((prev) => !prev)}
           style={
             isAllTaskClick
@@ -175,8 +175,7 @@ export default function Body() {
               : {
                   border: "0.3rem solid white",
                 }
-          }
-        >
+          }>
           <h2>
             {(isSortByDeadline && "Deadline") ||
               (isSortedByImportance && "Important") ||
@@ -184,7 +183,7 @@ export default function Body() {
           </h2>
           <img
             src={isAllTaskClick ? chevronDown_Dark : chevronDown}
-            alt="drop-down"
+            alt='drop-down'
             style={
               isAllTaskClick
                 ? {
@@ -205,16 +204,14 @@ export default function Body() {
               position: "absolute",
               zIndex: "1000",
               padding: "1rem 2rem",
-            }}
-          >
+            }}>
             <li
               onClick={() => {
                 setIsSortedByDeadline((prev) => !prev);
                 setIsSortedByImportance(false);
                 setAllTaskClick((prev) => !prev);
               }}
-              style={isSortByDeadline ? selectedSortStyle : { color: "black" }}
-            >
+              style={isSortByDeadline ? selectedSortStyle : { color: "black" }}>
               Sort By Deadline
             </li>
             <li
@@ -225,15 +222,14 @@ export default function Body() {
               }}
               style={
                 isSortedByImportance ? selectedSortStyle : { color: "black" }
-              }
-            >
+              }>
               Sort By Importance
             </li>
           </ul>
         )}
       </div>
 
-      <div className="task-container">
+      <div className='task-container'>
         {tasksData?.map((t) => (
           <Task
             key={t.id}
@@ -244,9 +240,9 @@ export default function Body() {
           />
         ))}
 
-        <div className="add-task">
+        <div className='add-task'>
           <button onClick={handleAddNewTask}>
-            <img src={task} alt="add-task" /> <h2>Add new task</h2>
+            <img src={task} alt='add-task' /> <h2>Add new task</h2>
           </button>
         </div>
       </div>
@@ -256,7 +252,7 @@ export default function Body() {
 
 //================================== Child Component : Task ==================================
 
-function Task({ data, onEdit, updateDeadline, onRemove }) {
+export function Task({ data, onEdit, updateDeadline, onRemove }) {
   //================================== Task's States & Variables ==================================
 
   // Task-specific state for UI interactions
@@ -287,29 +283,28 @@ function Task({ data, onEdit, updateDeadline, onRemove }) {
       <ContextMenu.Trigger asChild>
         <div
           className={data.is_complete ? "task-completed" : "task"}
-          id={data.is_important ? "important" : ""}
-        >
-          <div className="task-left">
+          id={data.is_important ? "important" : ""}>
+          <div className='task-left'>
             <img
               src={data.is_complete ? circle_click : circle}
-              alt="Done"
+              alt='Done'
               onClick={handleCircleClick}
             />
-            <div className="task-text">
+            <div className='task-text'>
               <input
-                name="title"
-                type="text"
+                name='title'
+                type='text'
                 value={data.title}
                 onChange={handleInput}
               />
               <textarea
-                name="description"
+                name='description'
                 value={data.description}
                 onChange={handleInput}
               />
             </div>
           </div>
-          <div className="task-right">
+          <div className='task-right'>
             <h3
               onClick={handleDateChanging}
               style={{
@@ -317,8 +312,7 @@ function Task({ data, onEdit, updateDeadline, onRemove }) {
                   data.deadline && new Date(data.deadline) < new Date()
                     ? "red"
                     : "black",
-              }}
-            >
+              }}>
               {!datePickerState &&
                 (data.deadline
                   ? formatDistanceToNow(new Date(data.deadline), {
@@ -329,7 +323,7 @@ function Task({ data, onEdit, updateDeadline, onRemove }) {
             <h3>
               {datePickerState && !data.is_complete && (
                 <DatePicker
-                  name="deadline"
+                  name='deadline'
                   showTimeSelect
                   selected={data.deadline ? new Date(data.deadline) : null}
                   onChange={(e) => updateDeadline(data.id, e.toISOString())}
@@ -342,10 +336,11 @@ function Task({ data, onEdit, updateDeadline, onRemove }) {
         </div>
       </ContextMenu.Trigger>
 
-      <ContextMenu.Content className="context-menu">
+      <ContextMenu.Content className='context-menu'>
         <ContextMenu.Item
-          onSelect={() => onEdit(data.id, { is_important: !data.is_important })}
-        >
+          onSelect={() =>
+            onEdit(data.id, { is_important: !data.is_important })
+          }>
           {data.is_important
             ? "[1] Set as Unimportant"
             : "[1] Set as Important"}

@@ -2,9 +2,10 @@ import db from "../models/index.js";
 
 export async function getAllTasks(req, res) {
   //const { user } = req.user;
-  const id = 1;
+  const userId = req.user.id;
+  // const id = 1;
   try {
-    const tasks = await db.Tasks.findAll({ where: { UserId: id } });
+    const tasks = await db.Tasks.findAll({ where: { UserId: userId } });
     res.json(tasks);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -15,9 +16,12 @@ export async function updateTask(req, res) {
   const { updateField } = req.body;
   const id = req.params.id;
   //const { user } = req.user;
+  const userId = req.user.id;
   console.log(updateField);
   try {
-    const result = await db.Tasks.update(updateField, { where: { id: id } });
+    const result = await db.Tasks.update(updateField, {
+      where: { id: id, UserId: userId },
+    });
     console.log(result);
     res.json(result);
   } catch (err) {
@@ -41,7 +45,8 @@ export async function addTask(req, res) {
   const { title, description, deadline, suggested_time } = req.body;
   console.log(5);
   //const { user } = req.user;
-  const id = 1;
+  const userId = req.user.id;
+  // const id = 1;
   try {
     await db.User.create({
       name: "root",
@@ -53,7 +58,7 @@ export async function addTask(req, res) {
       description,
       deadline,
       suggested_time,
-      UserId: id,
+      UserId: userId,
     });
     console.log(result);
     res.json(result);

@@ -1,4 +1,4 @@
-import UserModel from "./user.js";
+import UserModel from "./User.js";
 import TasksModel from "./Task.js";
 import WeeklyScheduleModel from "./WeeklySchedule.js";
 import WeeklyScheduleDetailsModel from "./WeeklyScheduleDetails.js";

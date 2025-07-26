@@ -2,6 +2,9 @@ import e from "express";
 import axios from "axios";
 import CORS from "cors";
 import taskRouter from "./routes/Tasks.js";
+import loginRouter from "./routes/login.js";
+import signUpRouter from "./routes/SignUp.js";
+import authMiddleware from "./middlewares/authMiddleware.js";
 
 const app = e();
 
@@ -16,55 +19,59 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api/", taskRouter);
+app.use("/api", signUpRouter);
 
-app.get("/api/ollama", (req, res) => {
-  res.send(`<form method="POST" action="/api/ollama" >
-                <input type="text" placeholder="Enter your prompt" name="prompt" value="Hello">
-                <button type="submit">Submit</button>
-            </form>`);
-});
+app.use("/api", loginRouter);
+app.use(authMiddleware);
+app.use("/api", taskRouter);
 
-app.post("/api/ollama", async (req, res) => {
-  try {
-    const userPrompt = req.body.prompt;
+// app.get("/api/ollama", (req, res) => {
+//   res.send(`<form method="POST" action="/api/ollama" >
+//                 <input type="text" placeholder="Enter your prompt" name="prompt" value="Hello">
+//                 <button type="submit">Submit</button>
+//             </form>`);
+// });
 
-    const response = await axios.post(
-      "http://localhost:11434/api/generate",
-      {
-        model: "llama3",
-        prompt:
-          'You are an API. Respond ONLY with valid JSON in this format: {"result": "..."}. Do not include any explanations or text outside the JSON. No greetings.' +
-          userPrompt,
-      },
-      {
-        responseType: "stream",
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+// app.post("/api/ollama", async (req, res) => {
+//   try {
+//     const userPrompt = req.body.prompt;
 
-    let finalResponse = "";
+//     const response = await axios.post(
+//       "http://localhost:11434/api/generate",
+//       {
+//         model: "phi",
+//         prompt:
+//           'You are an API. Respond ONLY with valid JSON in this format: {"result": "..."}. Do not include any explanations or text outside the JSON. No greetings.' +
+//           userPrompt,
+//       },
+//       {
+//         responseType: "stream",
+//         headers: { "Content-Type": "application/json" },
+//       }
+//     );
 
-    response.data.on("data", (chunk) => {
-      const lines = chunk.toString().split("\n").filter(Boolean);
-      for (const line of lines) {
-        const parsed = JSON.parse(line);
-        if (parsed.response) finalResponse += parsed.response;
-      }
-    });
+//     let finalResponse = "";
 
-    response.data.on("end", () => {
-      console.log(finalResponse);
-      let firstParse = JSON.parse(finalResponse);
+//     response.data.on("data", (chunk) => {
+//       const lines = chunk.toString().split("\n").filter(Boolean);
+//       for (const line of lines) {
+//         const parsed = JSON.parse(line);
+//         if (parsed.response) finalResponse += parsed.response;
+//       }
+//     });
 
-      console.log(firstParse);
-      res.json(firstParse);
-    });
-  } catch (err) {
-    console.error("Error:", err.message || err);
-    res.status(500).json({ error: "Failed to get response from Ollama" });
-  }
-});
+//     response.data.on("end", () => {
+//       console.log(finalResponse);
+//       let firstParse = JSON.parse(finalResponse);
+
+//       console.log(firstParse);
+//       res.json(firstParse);
+//     });
+//   } catch (err) {
+//     console.error("Error:", err.message || err);
+//     res.status(500).json({ error: "Failed to get response from Ollama" });
+//   }
+// });
 
 app.listen(3000, () => {
   console.log("Server is running in http://localhost:3000");

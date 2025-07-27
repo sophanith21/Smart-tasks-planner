@@ -1,12 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import logo from "../assets/logo.jpg";
+
 import task from "../assets/task.svg";
 import robot from "../assets/AI.svg";
 import history from "../assets/history.svg";
 import star from "../assets/star.svg";
 import schedule from "../assets/calendar.svg";
 import { isAuthenticated } from "../utils/auth";
-import Header from "./components/Header";
 import Footer from "./components/Footer";
 
 export default function Landing() {
@@ -18,7 +17,7 @@ export default function Landing() {
           {/* Hero Section */}
           <section className="w-full px-6 py-20 md:py-18 text-center bg-black text-white flex flex-col md:flex-row justify-center items-center gap-4">
             <img
-              src={logo}
+              src="../assets/Logo.jpg"
               alt="Smart Tasks Planner"
               className="w-[25rem] h-[25rem] rounded-3xl"
             />

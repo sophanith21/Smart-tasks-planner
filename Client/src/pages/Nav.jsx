@@ -11,7 +11,7 @@ export default function Nav() {
   const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
 
-  // Sort tasks by deadline (closest first)
+  // Sort tasks by deadline
   const getSortedTasks = (tasks) => {
     return [...tasks].sort((a, b) => {
       // Handle tasks with no deadline (push them to the end)

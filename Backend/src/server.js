@@ -20,6 +20,8 @@ app.use("/api", loginRouter);
 
 app.use(authMiddleware);
 
+//Logging middleware
+
 app.use((req, res, next) => {
   const method = req.method;
   const path = req.path;

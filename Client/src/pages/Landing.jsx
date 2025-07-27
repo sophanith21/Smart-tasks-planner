@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import logo from "../assets/logo.jpg";
+import logo from "../assets/Logo.jpg";
 import task from "../assets/task.svg";
 import robot from "../assets/AI.svg";
 import history from "../assets/history.svg";

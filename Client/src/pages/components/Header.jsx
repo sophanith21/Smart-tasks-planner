@@ -1,5 +1,5 @@
 import { useState } from "react";
-import logo from "../../assets/logo.jpg";
+import logo from "../../assets/Logo.jpg";
 import { getAuthUser, logout } from "../../utils/auth";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext.jsx";

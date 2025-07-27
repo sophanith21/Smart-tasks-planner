@@ -3,7 +3,7 @@ import { getToken, setToken, logout } from "../utils/auth";
 
 //For development only
 
-const baseURL = `http://${window.location.hostname}:3000/api`;
+const baseURL = `https://d47540cc29f4.ngrok-free.app/api`;
 
 const api = axios.create({
   baseURL: baseURL,

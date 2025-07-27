@@ -26,7 +26,7 @@ const WeeklyScheduleDetails = sequelize.define(
     indexes: [
       {
         unique: true,
-        fields: ["day", "time"],
+        fields: ["day", "time", "WeeklyScheduleId"],
       },
     ],
   }

@@ -117,6 +117,7 @@ export default function WeeklyScheduleBody() {
               setScheduleData={setScheduleData}
               tempNewDay={tempNewDay}
               days={days}
+              softRefresh={retrieveData}
             ></ScheduleTable>
           ) : (
             <button
@@ -146,31 +147,20 @@ export default function WeeklyScheduleBody() {
         </section>
         <div className="flex items-center justify-between w-full mb-5 relative">
           <Nav current="weekly-schedule"></Nav>
-          <button
-            type="button"
-            className="flex items-center gap-2.5 ml-5 mr-5 pl-2.5 pr-2.5 pt-2 pb-2 border-white border-4 rounded-2xl active:scale-95"
-          >
-            <svg
-              width="31"
-              height="30"
-              viewBox="0 0 47 46"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M29.825 32.0083L32.5084 29.3249L25.4167 22.2333V13.4166H21.5834V23.7666L29.825 32.0083ZM23.5 42.1666C20.8487 42.1666 18.357 41.6635 16.025 40.6572C13.6931 39.651 11.6646 38.2853 9.93962 36.5603C8.21462 34.8353 6.849 32.8069 5.84275 30.4749C4.8365 28.143 4.33337 25.6513 4.33337 22.9999C4.33337 20.3485 4.8365 17.8569 5.84275 15.5249C6.849 13.193 8.21462 11.1645 9.93962 9.4395C11.6646 7.7145 13.6931 6.34888 16.025 5.34263C18.357 4.33638 20.8487 3.83325 23.5 3.83325C26.1514 3.83325 28.6431 4.33638 30.975 5.34263C33.307 6.34888 35.3355 7.7145 37.0605 9.4395C38.7855 11.1645 40.1511 13.193 41.1573 15.5249C42.1636 17.8569 42.6667 20.3485 42.6667 22.9999C42.6667 25.6513 42.1636 28.143 41.1573 30.4749C40.1511 32.8069 38.7855 34.8353 37.0605 36.5603C35.3355 38.2853 33.307 39.651 30.975 40.6572C28.6431 41.6635 26.1514 42.1666 23.5 42.1666ZM23.5 38.3333C27.7487 38.3333 31.3664 36.8399 34.3532 33.853C37.34 30.8662 38.8334 27.2485 38.8334 22.9999C38.8334 18.7513 37.34 15.1336 34.3532 12.1468C31.3664 9.15999 27.7487 7.66659 23.5 7.66659C19.2514 7.66659 15.6337 9.15999 12.6469 12.1468C9.66011 15.1336 8.16671 18.7513 8.16671 22.9999C8.16671 27.2485 9.66011 30.8662 12.6469 33.853C15.6337 36.8399 19.2514 38.3333 23.5 38.3333Z"
-                fill="#FEF7FF"
-              />
-            </svg>
-            <h1>Get time suggestion</h1>
-          </button>
+          <div className="flex items-center gap-2.5 ml-5 mr-5 pl-2.5 pr-2.5 pt-2 pb-2 border-transparent border-4 rounded-2xl "></div>
         </div>
       </main>
     </>
   );
 }
 
-function ScheduleTable({ scheduleData, setScheduleData, tempNewDay, days }) {
+function ScheduleTable({
+  scheduleData,
+  setScheduleData,
+  tempNewDay,
+  days,
+  softRefresh,
+}) {
   const handleRemoveRow = async (time) => {
     console.log(time);
     setScheduleData((prev) =>
@@ -262,13 +252,13 @@ function ScheduleTable({ scheduleData, setScheduleData, tempNewDay, days }) {
     }
   };
 
-  const handleTimeChange = async (e, index) => {
+  const handleTimeChange = async (e, scheduleIndex) => {
     const newKey = e.target.value;
     let oldKey;
     let WeeklyScheduleId;
     await setScheduleData((prev) =>
       prev.map((item, oldIndex) => {
-        if (oldIndex === index) {
+        if (oldIndex === scheduleIndex) {
           oldKey = Object.keys(item)[0];
           const value = item[oldKey];
           WeeklyScheduleId = value[0].WeeklyScheduleId;
@@ -284,7 +274,11 @@ function ScheduleTable({ scheduleData, setScheduleData, tempNewDay, days }) {
         time: newKey,
         WeeklyScheduleId,
       });
+
       console.log(result.data);
+      if (result.data.id) {
+        await softRefresh();
+      }
     } catch (err) {
       console.error(err);
     }

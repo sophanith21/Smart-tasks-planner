@@ -83,7 +83,7 @@ export async function updateWeeklySchedule(req, res) {
           time,
           content: "",
           WeeklyScheduleId,
-          day: "Monday",
+          day: day ?? "Monday",
         });
         return res.json(addNewRow);
       }

@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import api from "../api/api.js";
 import { useEffect, useState } from "react";
 import * as Body from "./components/Tasks-body.jsx";
+import Header from "./components/Header.jsx";
+import Footer from "./components/Footer.jsx";
 
 export default function Nav() {
   const navigate = useNavigate();
@@ -104,6 +106,7 @@ export default function Nav() {
   };
   return (
     <>
+      <Header></Header>
       <div className="h-fit flex flex-col gap-8 p-8  items-center justify-center bg-gradient-to-br from-white-50 to-black-100">
         <div className="bg-[#EDEDED] p-8 rounded-2xl w-[78vw] min-w-173 h-fit overflow-hidden flex flex-col items-center justify-between">
           <h2
@@ -155,6 +158,7 @@ export default function Nav() {
           </div>
         </div>
       </div>
+      <Footer></Footer>
     </>
   );
 }

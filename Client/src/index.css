@@ -43,6 +43,10 @@ button {
   align-items: center;
 }
 
+.list-container {
+  position: relative;
+}
+
 .header {
   justify-content: space-between;
   margin: 1rem;
@@ -71,6 +75,8 @@ button {
   background-color: whitesmoke;
   border-radius: 1.2rem;
   border: black 0.1rem solid;
+
+  padding: 1rem 2rem;
 }
 /* ===================== Tasks Style ===================== */
 input,
@@ -279,10 +285,7 @@ li:hover {
   .react-datepicker-popper {
     left: -20% !important;
   }
-  .all-tasks {
-    padding: 0.5% 1% 0.5% 3%;
-    border-radius: 1.5em;
-  }
+
   .list-container > ul {
     top: 15% !important;
   }

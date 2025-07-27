@@ -11,6 +11,17 @@ export async function getAllTasks(req, res) {
   }
 }
 
+export async function getTask(req, res) {
+  const user = req.user;
+  const id = req.params.id;
+  try {
+    const task = await db.Tasks.findOne({ where: { UserId: user.id, id: id } });
+    res.json(task);
+  } catch (err) {
+    res.staus(500).json({ error: err.message });
+  }
+}
+
 export async function updateTask(req, res) {
   const user = req.user;
   const { updateField } = req.body;
@@ -43,21 +54,25 @@ export async function deleteTask(req, res) {
 }
 
 export async function addTask(req, res) {
-  const { title, description, deadline, suggested_time } = req.body;
+  const {
+    title,
+    description,
+    deadline,
+    suggested_time,
+    is_complete,
+    is_important,
+  } = req.body;
   console.log(5);
   const user = req.user;
   try {
-    await db.User.create({
-      name: "root",
-      email: "root@gmail.com",
-      password: "10",
-    });
     const result = await db.Tasks.create({
       title,
       description,
       deadline,
       suggested_time,
       UserId: user.id,
+      is_important,
+      is_complete,
     });
     console.log(result);
     res.json(result);

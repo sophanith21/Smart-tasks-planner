@@ -1,27 +1,31 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import * as ContextMenu from "@radix-ui/react-context-menu";
 
 import api from "../../api/api";
 import Nav from "./Nav";
 
 export default function WeeklyScheduleBody() {
-  const [scheduleData, setScheduleData] = useState([]);
+  const [scheduleData, setScheduleData] = useState();
+  const [WeeklyScheduleId, setWeeklyScheduleId] = useState();
   const tempNewDay = {
     id: null,
     day: "",
     content: "",
-    WeeklyScheduleId: 1,
+    WeeklyScheduleId,
   };
 
-  const days = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ];
+  const days = useMemo(
+    () => [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ],
+    []
+  );
 
   const handleNewRow = () => {
     let days = [];
@@ -31,39 +35,50 @@ export default function WeeklyScheduleBody() {
     setScheduleData((prev) => [...prev, { "": days }]);
   };
 
-  useEffect(() => {
-    let data;
-    const retrieveData = async () => {
-      try {
-        const result = await api.get("/weekly-schedule");
-        data = result.data;
-        setScheduleData(
-          data.map((timeSlotObj) => {
-            const time = Object.keys(timeSlotObj)[0];
-            const events = timeSlotObj[time];
+  const retrieveData = useCallback(async () => {
+    try {
+      const result = await api.get("/weekly-schedule");
+      const data = result.data.constructedData;
+      setWeeklyScheduleId(result.data.WeeklyScheduleId);
+      setScheduleData(
+        data.map((timeSlotObj) => {
+          const time = Object.keys(timeSlotObj)[0];
+          const events = timeSlotObj[time];
 
-            const newRow = days.map((day) => {
-              let event = events.find((e) => e?.day === day);
-              if (event) {
-                return event;
-              } else {
-                return {
-                  id: events.length + 1,
-                  day: day,
-                  content: "",
-                  WeeklyScheduleId: 1,
-                };
-              }
-            });
-            return { [time]: newRow };
-          })
-        );
-      } catch (err) {
-        console.error(err);
-      }
-    };
+          const newRow = days.map((day) => {
+            let event = events.find((e) => e?.day === day);
+            if (event) {
+              return event;
+            } else {
+              return {
+                id: events.length + 1,
+                day: day,
+                content: "",
+                WeeklyScheduleId,
+              };
+            }
+          });
+          return { [time]: newRow };
+        })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  }, [days, WeeklyScheduleId]);
+
+  const handleNewSchedule = async () => {
+    try {
+      const result = await api.post("/weekly-schedule");
+      console.log(result.data);
+      retrieveData();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
     retrieveData();
-  }, []);
+  }, [retrieveData]);
 
   return (
     <>
@@ -72,34 +87,62 @@ export default function WeeklyScheduleBody() {
           <div className="flex items-center gap-2.5 ml-5 mr-5 pl-2.5 pr-2.5 pt-2 pb-2 border-white border-4 rounded-2xl ">
             <span>Weekly Schedule</span>
           </div>
-          <button
-            type="button"
-            className="flex items-center gap-2.5 ml-5 mr-5 pl-2.5 pr-2.5 pt-2 pb-2 border-white border-4 rounded-2xl active:scale-95"
-            onClick={handleNewRow}
-          >
-            <svg
-              width="35"
-              height="35"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+          {scheduleData && (
+            <button
+              type="button"
+              className="flex items-center gap-2.5 ml-5 mr-5 pl-2.5 pr-2.5 pt-2 pb-2 border-white border-4 rounded-2xl active:scale-95"
+              onClick={handleNewRow}
             >
-              <path
-                d="M11 17H13V13H17V11H13V7H11V11H7V13H11V17ZM12 22C10.6167 22 9.31667 21.7417 8.1 21.225C6.88333 20.6917 5.825 19.975 4.925 19.075C4.025 18.175 3.30833 17.1167 2.775 15.9C2.25833 14.6833 2 13.3833 2 12C2 10.6167 2.25833 9.31667 2.775 8.1C3.30833 6.88333 4.025 5.825 4.925 4.925C5.825 4.025 6.88333 3.31667 8.1 2.8C9.31667 2.26667 10.6167 2 12 2C13.3833 2 14.6833 2.26667 15.9 2.8C17.1167 3.31667 18.175 4.025 19.075 4.925C19.975 5.825 20.6833 6.88333 21.2 8.1C21.7333 9.31667 22 10.6167 22 12C22 13.3833 21.7333 14.6833 21.2 15.9C20.6833 17.1167 19.975 18.175 19.075 19.075C18.175 19.975 17.1167 20.6917 15.9 21.225C14.6833 21.7417 13.3833 22 12 22ZM12 20C14.2333 20 16.125 19.225 17.675 17.675C19.225 16.125 20 14.2333 20 12C20 9.76667 19.225 7.875 17.675 6.325C16.125 4.775 14.2333 4 12 4C9.76667 4 7.875 4.775 6.325 6.325C4.775 7.875 4 9.76667 4 12C4 14.2333 4.775 16.125 6.325 17.675C7.875 19.225 9.76667 20 12 20Z"
-                fill="#F3F3F3"
-              />
-            </svg>
+              <svg
+                width="35"
+                height="35"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M11 17H13V13H17V11H13V7H11V11H7V13H11V17ZM12 22C10.6167 22 9.31667 21.7417 8.1 21.225C6.88333 20.6917 5.825 19.975 4.925 19.075C4.025 18.175 3.30833 17.1167 2.775 15.9C2.25833 14.6833 2 13.3833 2 12C2 10.6167 2.25833 9.31667 2.775 8.1C3.30833 6.88333 4.025 5.825 4.925 4.925C5.825 4.025 6.88333 3.31667 8.1 2.8C9.31667 2.26667 10.6167 2 12 2C13.3833 2 14.6833 2.26667 15.9 2.8C17.1167 3.31667 18.175 4.025 19.075 4.925C19.975 5.825 20.6833 6.88333 21.2 8.1C21.7333 9.31667 22 10.6167 22 12C22 13.3833 21.7333 14.6833 21.2 15.9C20.6833 17.1167 19.975 18.175 19.075 19.075C18.175 19.975 17.1167 20.6917 15.9 21.225C14.6833 21.7417 13.3833 22 12 22ZM12 20C14.2333 20 16.125 19.225 17.675 17.675C19.225 16.125 20 14.2333 20 12C20 9.76667 19.225 7.875 17.675 6.325C16.125 4.775 14.2333 4 12 4C9.76667 4 7.875 4.775 6.325 6.325C4.775 7.875 4 9.76667 4 12C4 14.2333 4.775 16.125 6.325 17.675C7.875 19.225 9.76667 20 12 20Z"
+                  fill="#F3F3F3"
+                />
+              </svg>
 
-            <span>Add row</span>
-          </button>
+              <span>Add row</span>
+            </button>
+          )}
         </section>
         <section className="flex justify-center">
-          <ScheduleTable
-            scheduleData={scheduleData}
-            setScheduleData={setScheduleData}
-            tempNewDay={tempNewDay}
-            days={days}
-          ></ScheduleTable>
+          {scheduleData ? (
+            <ScheduleTable
+              scheduleData={scheduleData}
+              setScheduleData={setScheduleData}
+              tempNewDay={tempNewDay}
+              days={days}
+            ></ScheduleTable>
+          ) : (
+            <button
+              type="button"
+              className="flex items-center gap-2.5 ml-5 mr-5 pl-2.5 pr-2.5 pt-2 pb-2 border-white border-4 rounded-2xl active:scale-95"
+              onClick={handleNewSchedule}
+            >
+              <svg
+                width="44"
+                height="44"
+                viewBox="0 0 48 48"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M32 8H36C37.0609 8 38.0783 8.42143 38.8284 9.17157C39.5786 9.92172 40 10.9391 40 12V40C40 41.0609 39.5786 42.0783 38.8284 42.8284C38.0783 43.5786 37.0609 44 36 44H12C10.9391 44 9.92172 43.5786 9.17157 42.8284C8.42143 42.0783 8 41.0609 8 40V12C8 10.9391 8.42143 9.92172 9.17157 9.17157C9.92172 8.42143 10.9391 8 12 8H16M18 4H30C31.1046 4 32 4.89543 32 6V10C32 11.1046 31.1046 12 30 12H18C16.8954 12 16 11.1046 16 10V6C16 4.89543 16.8954 4 18 4Z"
+                  stroke="#F3F3F3"
+                  stroke-width="4"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+
+              <h1>Create a weekly schedule</h1>
+            </button>
+          )}
         </section>
         <div className="flex items-center justify-between w-full mb-5 relative">
           <Nav current="weekly-schedule"></Nav>
@@ -134,8 +177,18 @@ function ScheduleTable({ scheduleData, setScheduleData, tempNewDay, days }) {
       prev.filter((item) => Object.keys(item)[0] !== time)
     );
     try {
-      const result = await api.delete(`/weekly-schedule?time=${time}`);
+      const result = await api.delete(`/weekly-schedule/row?time=${time}`);
       console.log(result.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleDeleteSchedule = async () => {
+    try {
+      const result = await api.delete(`/weekly-schedule`);
+      console.log(result.data);
+      setScheduleData(null);
     } catch (err) {
       console.error(err);
     }
@@ -278,6 +331,9 @@ function ScheduleTable({ scheduleData, setScheduleData, tempNewDay, days }) {
                       <ContextMenu.Item onSelect={() => handleRemoveRow(time)}>
                         Delete row
                       </ContextMenu.Item>
+                      <ContextMenu.Item onSelect={handleDeleteSchedule}>
+                        Delete the schedule
+                      </ContextMenu.Item>
                     </ContextMenu.Content>
                   </ContextMenu.Root>
                 </td>
@@ -325,6 +381,9 @@ function ScheduleTable({ scheduleData, setScheduleData, tempNewDay, days }) {
                             onSelect={() => handleRemoveRow(time)}
                           >
                             Delete row
+                          </ContextMenu.Item>
+                          <ContextMenu.Item onSelect={handleDeleteSchedule}>
+                            Delete the schedule
                           </ContextMenu.Item>
                         </ContextMenu.Content>
                       </ContextMenu.Root>

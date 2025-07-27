@@ -4,9 +4,14 @@ export async function getWeeklySchedule(req, res) {
   const user = req.user;
   try {
     const schedule = await db.WeeklySchedule.findOne({
-      Where: { UserId: user.id },
+      where: { UserId: user.id },
       include: db.WeeklyScheduleDetails,
     });
+    if (!schedule) {
+      return res
+        .status(404)
+        .json({ error: "No schedule found for this user." });
+    }
     const data = schedule["WeeklyScheduleDetails"];
     const uniqueTime = [...new Set(data.map((e) => e.time))];
 
@@ -25,7 +30,29 @@ export async function getWeeklySchedule(req, res) {
       });
       constructedData.push(row);
     });
-    res.json(constructedData);
+    res.json({ constructedData, WeeklyScheduleId: schedule.id });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+export async function createNewSchedule(req, res) {
+  const user = req.user;
+  try {
+    const result = await db.WeeklySchedule.create({ UserId: user.id });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+export async function deleteWeeklySchedule(req, res) {
+  const user = req.user;
+  try {
+    const result = await db.WeeklySchedule.destroy({
+      where: { UserId: user.id },
+    });
+    res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -26,7 +26,7 @@ export default function Nav({ current }) {
             stroke-linejoin="round"
           />
         </svg>
-        <h1>Home</h1>
+        <h1>Navigate</h1>
       </button>
       {isOpen && (
         <div className="absolute bottom-full mb-2 ml-5 w-48 bg-white rounded-md shadow-lg">
@@ -54,6 +54,30 @@ export default function Nav({ current }) {
               }}
             >
               Weekly Schedule
+            </li>
+            <li
+              className={
+                current == "history"
+                  ? "flex justify-start text-black p-3 !rounded-[0.5rem] font-bold"
+                  : "flex justify-start text-black p-3 !rounded-[0.5rem]"
+              }
+              onClick={() => {
+                navigate("/history");
+              }}
+            >
+              History
+            </li>
+            <li
+              className={
+                current == "weekly-schedule"
+                  ? "flex justify-start text-black p-3 !rounded-[0.5rem] font-bold"
+                  : "flex justify-start text-black p-3 !rounded-[0.5rem]"
+              }
+              onClick={() => {
+                navigate("/weekly-schedule");
+              }}
+            >
+              Home
             </li>
           </ul>
         </div>

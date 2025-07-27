@@ -6,10 +6,20 @@
 }
 
 .logo {
-  height: 6em;
-  padding: 1.5em;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 10%;
+  overflow: hidden;
+  background-color: white;
   will-change: filter;
   transition: filter 300ms;
+}
+
+.logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);

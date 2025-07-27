@@ -69,12 +69,12 @@ export default function Nav({ current }) {
             </li>
             <li
               className={
-                current == "weekly-schedule"
+                current == ""
                   ? "flex justify-start text-black p-3 !rounded-[0.5rem] font-bold"
                   : "flex justify-start text-black p-3 !rounded-[0.5rem]"
               }
               onClick={() => {
-                navigate("/weekly-schedule");
+                navigate("/nav");
               }}
             >
               Home

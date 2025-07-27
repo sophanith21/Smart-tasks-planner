@@ -9,8 +9,9 @@ import { useCallback, useEffect, useState } from "react";
 import * as ContextMenu from "@radix-ui/react-context-menu";
 import "react-datepicker/dist/react-datepicker.css";
 import api from "../../api/api";
-import Nav from "./Nav";
+import Nav from "./Nav-button";
 import Suggestion from "./Suggestion";
+import { getAuthUser } from "../../utils/auth";
 
 export default function Body() {
   //================================== Body's States & Variables ==================================
@@ -25,6 +26,18 @@ export default function Body() {
   const [isSortByDeadline, setIsSortedByDeadline] = useState(false);
   const [isSortedByImportance, setIsSortedByImportance] = useState(false);
   const [isSuggestButtonClick, setIsSuggestButtonClick] = useState(false);
+
+  // Template for a new task
+  const [newTaskFormat, setNewTaskFormat] = useState({
+    id: null,
+    title: "new task",
+    description: "description",
+    deadline: null,
+    suggested_time: null,
+    is_complete: false,
+    is_important: false,
+    UserId: null,
+  });
 
   const softRefresh = useCallback(() => {
     const retrieveData = async () => {
@@ -47,18 +60,6 @@ export default function Body() {
 
   const getRandomText = () => texts[Math.floor(Math.random() * texts.length)];
 
-  // Template for a new task
-  const newTask = {
-    id: null,
-    title: "new task",
-    description: "description",
-    deadline: null,
-    suggested_time: null,
-    is_complete: false,
-    is_important: false,
-    UserId: 1, // change once auth is implemented
-  };
-
   // Style the selected sort in <li>
   const selectedSortStyle = {
     color: "black",
@@ -71,7 +72,7 @@ export default function Body() {
   //Add a new task to the list
   const handleAddNewTask = async (e) => {
     e.preventDefault();
-    let tempData = newTask;
+    let tempData = newTaskFormat;
     try {
       const result = await api.post("/tasks", tempData);
       tempData.id = result.data.id;
@@ -196,6 +197,8 @@ export default function Body() {
 
   useEffect(() => {
     softRefresh();
+    const user = getAuthUser();
+    setNewTaskFormat((prev) => ({ ...prev, UserId: user.id }));
   }, [softRefresh]);
 
   // Re-sort whenever the sorting state changes
@@ -323,12 +326,12 @@ export default function Body() {
             />
           ))}
 
-          <button className="add-task">
+          <div className="add-task">
             <button onClick={handleAddNewTask}>
               <img src={task} alt="add-task" />
               <h2>Add new task</h2>
             </button>
-          </button>
+          </div>
           <div className="flex relative items-center justify-between w-full">
             <Nav current="tasks"></Nav>
             <button
@@ -359,7 +362,7 @@ export default function Body() {
 
 //================================== Child Component : Task ==================================
 
-function Task({
+export function Task({
   data,
   onEdit,
   updateDeadline,

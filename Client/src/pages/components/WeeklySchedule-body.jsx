@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import * as ContextMenu from "@radix-ui/react-context-menu";
 
 import api from "../../api/api";
-import Nav from "./Nav";
+import Nav from "./Nav-button";
 
 export default function WeeklyScheduleBody() {
   const [scheduleData, setScheduleData] = useState();

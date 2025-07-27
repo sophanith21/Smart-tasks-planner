@@ -1,6 +1,8 @@
 import e from "express";
-import axios from "axios";
 import CORS from "cors";
+import signUpRouter from "./routes/SignUp.js";
+import userRouter from "./routes/User..js";
+import loginRouter from "./routes/login.js";
 import taskRouter from "./routes/Tasks.js";
 import weeklyScheduleRouter from "./routes/WeeklySchedule.js";
 import historyRouter from "./routes/History.js";
@@ -11,6 +13,11 @@ const app = e();
 
 app.use(CORS());
 app.use(e.json());
+
+app.use("/api", signUpRouter);
+
+app.use("/api", loginRouter);
+
 app.use(authMiddleware);
 
 app.use((req, res, next) => {
@@ -20,6 +27,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use("/api/", userRouter);
 app.use("/api/", taskRouter);
 app.use("/api/", weeklyScheduleRouter);
 app.use("/api/", historyRouter);

@@ -1,6 +1,31 @@
+import { useState } from "react";
 import logo from "../../assets/Logo.jpg";
+import { getAuthUser, logout } from "../../utils/auth";
+import { useContext } from "react";
+import { AuthContext } from "../../context/authContext.jsx";
+import api from "../../api/api.js";
 
 export default function Header() {
+  const [user, setUser] = useState(getAuthUser());
+  const [isAccountClick, setIsAccountClick] = useState(false);
+  const userAuth = useContext(AuthContext);
+
+  const handleLogOut = () => {
+    logout();
+    setIsAccountClick(false);
+    userAuth.setAuth(null);
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      const result = await api.delete("/user");
+      console.log(result);
+      handleLogOut();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <header className="header">
       <div className="flex items-center gap-5">
@@ -9,9 +34,32 @@ export default function Header() {
         </div>
         <h1 className="text-2xl">Smart Tasks Planner</h1>
       </div>
-      <div className="flex items-center gap-5">
-        <h1 className="text-2xl">My Name</h1>
-        <div>
+      <div className="flex items-center gap-5 relative ">
+        {isAccountClick && (
+          <div className="absolute z-10 top-[120%] left-0 bg-amber-50 rounded-[0.5rem] flex flex-col w-fit p-2">
+            <button
+              className=" text-black pl-3 pr-3 pt-2 pb-2 hover:bg-amber-100  active:scale-95"
+              onClick={() => {
+                handleLogOut();
+              }}
+            >
+              Log out
+            </button>
+            <button
+              className=" text-black pl-3 pr-3 pt-2 pb-2 hover:bg-amber-100 active:scale-95"
+              onClick={() => {
+                handleDeleteAccount();
+              }}
+            >
+              Delete Account
+            </button>
+          </div>
+        )}
+        <h1 className="text-2xl">{user.name}</h1>
+        <button
+          className="cursor-pointer active:scale-95"
+          onClick={() => setIsAccountClick(!isAccountClick)}
+        >
           <svg
             width="70"
             height="70"
@@ -41,7 +89,7 @@ export default function Header() {
               stroke-linejoin="round"
             />
           </svg>
-        </div>
+        </button>
       </div>
     </header>
   );

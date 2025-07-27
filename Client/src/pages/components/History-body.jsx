@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import * as ContextMenu from "@radix-ui/react-context-menu";
 import "react-datepicker/dist/react-datepicker.css";
 import api from "../../api/api";
-import Nav from "./Nav";
+import Nav from "./Nav-button";
 import Suggestion from "./Suggestion";
 
 export default function Body() {

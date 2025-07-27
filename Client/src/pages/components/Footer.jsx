@@ -27,9 +27,10 @@ export default function Footer() {
         </div>
         <div className="right">
           <a
-            href="https://github.com/sophanith21"
+            href="https://github.com/sophanith21/Smart-tasks-planner.git"
             target="_blank"
             rel="noopener noreferrer"
+            className="!items-center !flex !flex-col"
           >
             <img src={GitHub} alt="GitHub" />
             <h3>Github</h3>

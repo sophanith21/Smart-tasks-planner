@@ -1,7 +1,8 @@
 import { Router } from "express";
+import { deleteAccount } from "../controllers/authController.js";
 
 const router = Router();
 
-router.get("/:id/tasks");
-router.get("/:id/history");
-router.get("/:id/weekly-schedule");
+router.delete("/user", deleteAccount);
+
+export default router;

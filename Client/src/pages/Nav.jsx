@@ -107,10 +107,10 @@ export default function Nav() {
   return (
     <>
       <Header></Header>
-      <div className="h-fit flex flex-col gap-8 p-8  items-center justify-center bg-gradient-to-br from-white-50 to-black-100">
+      <div className="h-fit flex flex-col gap-8 p-8  grow items-center justify-center bg-gradient-to-br from-white-50 to-black-100">
         <div className="bg-[#EDEDED] p-8 rounded-2xl w-[78vw] min-w-173 h-fit overflow-hidden flex flex-col items-center justify-between">
           <h2
-            className=" text-[2.25rem] font-bold text-center text-gray-800 text-left w-full hover:cursor-pointer hover:text-shadow-lg hover:text-shadow-white transition-transform duration-200 hover:text-gray-400"
+            className=" text-[2.25rem] font-bold  text-gray-800 text-left w-full hover:cursor-pointer hover:text-shadow-lg hover:text-shadow-white transition-transform duration-200 hover:text-gray-400"
             onClick={() => navigate("/tasks")}
           >
             Tasks Highlight
@@ -130,29 +130,24 @@ export default function Nav() {
         </div>
         <div className="bg-transparent gap-8 rounded-lg w-[78vw] min-w-173 h-full flex items-center justify-center">
           <div
-            className="bg-[#EDEDED]  p-8 rounded-2xl w-1/2  flex items-center justify-between hover:cursor-pointer hover:shadow-lg hover:shadow-gray-300 transition-transform duration-200 hover:scale-102"
+            className="bg-[#EDEDED]  p-8 rounded-2xl w-1/2   flex items-center justify-between hover:cursor-pointer hover:shadow-lg hover:shadow-gray-300 transition-transform duration-200 hover:scale-102"
             onClick={() => navigate("/weekly-schedule")}
           >
-            <img
-              src={calendar}
-              alt="Schedule"
-              className="w-[10rem] h-[10rem] "
-            />
-            <h2 className="text-3xl font-bold text-center text-gray-800 pt-25">
-              Schedule
+            <img src={calendar} alt="Schedule" className="w-[7rem] h-full " />
+            <h2 className="text-3xl font-bold text-center text-gray-800 ">
+              Weekly Schedule
             </h2>
           </div>
           <div
             className="bg-[#EDEDED] p-8 rounded-2xl w-1/2  flex items-center justify-between hover:cursor-pointer hover:shadow-lg hover:shadow-gray-300 transition-transform duration-200 hover:scale-102"
             onClick={() => navigate("/history")}
           >
-            {" "}
             <img
               src={robot}
               alt="AI Suggestion History"
-              className="w-[10rem] h-[10rem]"
+              className="w-[7rem] h-full"
             />
-            <h2 className="text-3xl font-bold text-center text-gray-800 pt-25">
+            <h2 className="text-3xl font-bold text-center text-gray-800 ">
               AI Suggestion History
             </h2>
           </div>

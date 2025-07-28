@@ -44,13 +44,12 @@ export default function Login() {
       });
       setToken(response.data.token);
       const decodedUser = jwtDecode(response.data.token);
-      setAuth({
-        ...decodedUser,
-        token: response.data.token,
+      setAuth(() => {
+        return {
+          ...decodedUser,
+          token: response.data.token,
+        };
       });
-
-      const redirectPath = location.state?.from?.pathname || "/nav";
-      navigate(redirectPath, { replace: true });
     } catch (err) {
       setError("Invalid email or password. Please try again.");
       console.error("login error:", err);
@@ -58,6 +57,13 @@ export default function Login() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (auth) {
+      const redirectPath = location.state?.from?.pathname || "/nav";
+      navigate(redirectPath);
+    }
+  }, [auth]);
 
   return (
     <>

@@ -18,7 +18,8 @@ export async function getSuggestion(req, res) {
         }
         No extra text.
 
-        Analyze the schedule and tasks below and assign the best times to do those task, title, description(keep it short) and reason (descriptive).
+        Analyze the schedule and tasks below and assign the best times to start doing those task, title (Suggestion title), description(keep it short) and reason .
+        NOTE: If the provided schedule has time slots that are missing days (Monday, etc), it means the time slot at that day is "Free Time"
 
         Your goal is to find the best possible time to schedule each task. The ideal 'suggested_time' is one that is:
         1. Before the task's deadline.

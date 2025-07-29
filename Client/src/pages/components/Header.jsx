@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import logo from "../../assets/smart_tasks_panner.jpg";
 import { getAuthUser, logout } from "../../utils/auth";
 import { useContext } from "react";
@@ -10,6 +11,7 @@ export default function Header() {
   const [isAccountClick, setIsAccountClick] = useState(false);
   const userAuth = useContext(AuthContext);
 
+  const navigate = useNavigate();
   const handleLogOut = () => {
     logout();
     setIsAccountClick(false);
@@ -28,7 +30,10 @@ export default function Header() {
 
   return (
     <header className="header">
-      <div className="flex items-center gap-5">
+      <div
+        className="flex items-center gap-5 active:scale-95 cursor-pointer"
+        onClick={() => navigate("/")}
+      >
         <div className="logo">
           <img src={logo} alt="Smart Tasks Planner" />
         </div>
@@ -55,7 +60,7 @@ export default function Header() {
             </button>
           </div>
         )}
-        <h1 className="text-2xl">{user.name}</h1>
+        <h1 className="text-2xl">{user?.name ?? "User"}</h1>
         <button
           className="cursor-pointer active:scale-95"
           onClick={() => setIsAccountClick(!isAccountClick)}

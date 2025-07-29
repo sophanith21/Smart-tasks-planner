@@ -107,7 +107,7 @@ export default function Nav() {
   return (
     <>
       <Header></Header>
-      <div className="h-fit flex flex-col gap-8 p-8  grow items-center justify-center bg-gradient-to-br from-white-50 to-black-100">
+      <div className="h-fit flex flex-col gap-8 p-8  grow items-center justify-start  bg-gradient-to-br from-white-50 to-black-100">
         <div className="bg-[#EDEDED] p-8 rounded-2xl w-[78vw] min-w-173 h-fit overflow-hidden flex flex-col items-center justify-between">
           <h2
             className=" text-[2.25rem] font-bold  text-gray-800 text-left w-full hover:cursor-pointer hover:text-shadow-lg hover:text-shadow-white transition-transform duration-200 hover:text-gray-400"

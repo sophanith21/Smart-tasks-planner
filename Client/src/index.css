@@ -85,6 +85,7 @@ textarea {
   background-color: transparent;
   border-color: transparent;
   field-sizing: content;
+
   resize: none;
   outline: none;
   padding: 0.4rem;

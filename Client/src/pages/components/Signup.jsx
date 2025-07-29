@@ -10,6 +10,7 @@ export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmedPassowrd, setConfirmedPassword] = useState();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -19,34 +20,39 @@ export default function Register() {
     e.preventDefault();
     setError("");
     setLoading(true);
-
-    try {
-      const response = await api.post("/signup", {
-        name,
-        email,
-        password,
-      });
-
-      if (response.data.token) {
-        const token = response.data.token;
-        setToken(token);
-
-        const decoded = jwtDecode(token);
-        setAuth({
-          ...decoded,
-          token,
+    if (password === confirmedPassowrd) {
+      try {
+        const response = await api.post("/signup", {
+          name,
+          email,
+          password,
         });
 
-        navigate("/nav");
-      } else {
-        navigate("/login", { state: { email } });
+        if (response.data.token) {
+          const token = response.data.token;
+          setToken(token);
+
+          const decoded = jwtDecode(token);
+          setAuth({
+            ...decoded,
+            token,
+          });
+
+          navigate("/nav");
+        } else {
+          navigate("/login", { state: { email } });
+        }
+      } catch (err) {
+        console.error("Registration error:", err);
+        setError(
+          err.response?.data?.message ||
+            "Registration failed. Please try again."
+        );
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error("Registration error:", err);
-      setError(
-        err.response?.data?.message || "Registration failed. Please try again."
-      );
-    } finally {
+    } else {
+      setError("Confirmed password does not match. Please try again.");
       setLoading(false);
     }
   };
@@ -100,6 +106,18 @@ export default function Register() {
             placeholder="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
+            required
+          />
+
+          <label className="text-black text-xl font-bold text-left w-full block ml-1.5">
+            Confirm Password
+          </label>
+          <input
+            type="password"
+            placeholder="password"
+            value={confirmedPassowrd}
+            onChange={(e) => setConfirmedPassword(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
             required
           />

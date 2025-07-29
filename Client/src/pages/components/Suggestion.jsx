@@ -50,8 +50,8 @@ export default function Suggestion({
 
   return (
     <>
-      <div className="fixed z-5 w-full h-full bg-transparent">
-        <div className="p-5 inset-5 fixed bg-white z-100 rounded-2xl justify-self-center w-[70%] ml-10 mr-10 flex flex-col">
+      <div className="fixed z-5 w-full h-full bg-transparent inset-0">
+        <div className="p-5 inset-5 fixed bg-white z-100 rounded-2xl justify-self-center w-fit ml-10 mr-10 flex flex-col h-fit">
           <div className="flex justify-between">
             <h1 className="grow">
               <input value={suggest.title} />
